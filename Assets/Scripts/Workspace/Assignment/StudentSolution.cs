@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Assignment
 {
-    public class StudentSolution : MonoBehaviour, IAssignment
+    public class StudentSolution : MonoBehaviour
     {
         #region Lecture
 
