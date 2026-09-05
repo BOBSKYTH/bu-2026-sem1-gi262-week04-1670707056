@@ -7,7 +7,7 @@ namespace Solution
         public override bool Hit()
         {
             Debug.Log("Item: " + Name + " has been picked up.");
-            // ∑”≈“¬‰Õ‡∑Á¡ÕÕ°®“°©“°
+            // ‡∏ó‡∏≥‡∏•‡∏≤‡∏¢‡πÑ‡∏≠‡πÄ‡∏ó‡πá‡∏°‡∏≠‡∏≠‡∏Å‡∏à‡∏≤‡∏Å‡∏â‡∏≤‡∏Å
 
             return true;
         }
