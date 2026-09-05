@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 namespace Solution
@@ -9,6 +10,14 @@ namespace Solution
     public class OOPPlayer : Character
     {
         public Inventory inventory;
+
+        private InputAction moveAction;
+
+        void Awake()
+        {
+            moveAction = InputSystem.actions.FindAction("Move");
+        }
+
         public void Start()
         {
             PrintInfo();
@@ -18,21 +27,10 @@ namespace Solution
 
         public void Update()
         {
-            if (Input.GetKeyDown(KeyCode.W))
+            var dir = moveAction.ReadValue<Vector2>();
+            if (dir != Vector2.zero && moveAction.triggered)
             {
-                Move(Vector2.up);
-            }
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                Move(Vector2.down);
-            }
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                Move(Vector2.left);
-            }
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                Move(Vector2.right);
+                Move(dir);
             }
         }
 

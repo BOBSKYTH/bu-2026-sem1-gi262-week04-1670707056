@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 namespace Solution
@@ -17,9 +18,11 @@ namespace Solution
 
         private Vector3 moveDirection;
 
+        private InputAction growAction;
+
         private void Start()
         {
-           
+            growAction = InputSystem.actions.FindAction("Grow");
             moveDirection = Vector3.up;
             isAlive = true;
             // เริ่ม Coroutine สำหรับการเคลื่อนที่
@@ -29,7 +32,7 @@ namespace Solution
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (growAction.triggered)
             {
                 Grow();
             }
