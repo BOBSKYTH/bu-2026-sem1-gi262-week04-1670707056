@@ -1,12 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEditor.PlayerSettings;
-using static UnityEngine.EventSystems.EventTrigger;
 
-namespace Student
+
+namespace Solution
 {
     public class Character : Identity
     {
@@ -36,72 +31,37 @@ namespace Student
 
             if (HasPlacement(toX, toY))
             {
-                if (IsDemonWalls(toX, toY))
+                bool isCanWalkTo = mapGenerator.GetMapData(toX,toY).Hit();
+                if (isCanWalkTo)
                 {
-                    mapGenerator.walls[toX, toY].Hit();
+                    UpdatePosition(toX, toY);
                 }
-                else if (IsPotion(toX, toY))
-                {
-                    mapGenerator.potions[toX, toY].Hit();
-                    positionX = toX;
-                    positionY = toY;
-                    transform.position = new Vector3(positionX, positionY, 0);
-                }
-                else if (IsPotionBonus(toX, toY))
-                {
-                    mapGenerator.potions[toX, toY].Hit();
-                    positionX = toX;
-                    positionY = toY;
-                    transform.position = new Vector3(positionX, positionY, 0);
-                }
-                else if (IsExit(toX, toY))
-                {
-                    mapGenerator.Exit.Hit();
-                    positionX = toX;
-                    positionY = toY;
-                    transform.position = new Vector3(positionX, positionY, 0);
-                }
+
             }
             else
             {
-                positionX = toX;
-                positionY = toY;
-                transform.position = new Vector3(positionX, positionY, 0);
+                UpdatePosition(toX, toY);
                 TakeDamage(1);
             }
 
         }
+
+        public virtual void UpdatePosition(int toX, int toY)
+        {
+            mapGenerator.mapdata[positionX, positionY] = null;
+            positionX = toX;
+            positionY = toY;
+            transform.position = new Vector3(positionX, positionY, 0);
+            mapGenerator.mapdata[positionX, positionY] = this;
+        }
+
         // hasPlacement คืนค่า true ถ้ามีการวางอะไรไว้บน map ที่ตำแหน่ง x,y
         public bool HasPlacement(int x, int y)
         {
-            int mapData = mapGenerator.GetMapData(x, y);
-            return mapData != mapGenerator.empty;
+            var mapData = mapGenerator.GetMapData(x, y);
+            return mapData != null;
         }
-        public bool IsDemonWalls(int x, int y)
-        {
-            int mapData = mapGenerator.GetMapData(x, y);
-            return mapData == mapGenerator.demonWall;
-        }
-        public bool IsPotion(int x, int y)
-        {
-            int mapData = mapGenerator.GetMapData(x, y);
-            return mapData == mapGenerator.potion;
-        }
-        public bool IsPotionBonus(int x, int y)
-        {
-            int mapData = mapGenerator.GetMapData(x, y);
-            return mapData == mapGenerator.potion;
-        }
-        // public bool IsKey(int x, int y)
-        // {
-        //     int mapData = mapGenerator.GetMapData(x, y);
-        //     return mapData == mapGenerator.key;
-        // }
-        public bool IsExit(int x, int y)
-        {
-            int mapData = mapGenerator.GetMapData(x, y);
-            return mapData == mapGenerator.exit;
-        }
+      
 
         public virtual void TakeDamage(int Damage)
         {

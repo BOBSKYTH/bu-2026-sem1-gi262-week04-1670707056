@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Student
+namespace Solution
 {
 
     public class OOPItemPotion : Identity
@@ -18,7 +18,7 @@ namespace Student
                 GetComponent<SpriteRenderer>().color = Color.blue;
             }
         }
-        public override void Hit()
+        public override bool Hit()
         {
             if (isBonues)
             {
@@ -32,8 +32,11 @@ namespace Student
             }
 
 
-            mapGenerator.mapdata[positionX, positionY] = 0;
+            mapGenerator.mapdata[positionX, positionY] = null;
+            
+            mapGenerator.player.UpdatePosition(positionX, positionY);
             Destroy(gameObject);
+            return true;
         }
     }
 }

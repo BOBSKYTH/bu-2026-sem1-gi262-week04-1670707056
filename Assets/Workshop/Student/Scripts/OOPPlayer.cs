@@ -1,31 +1,38 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
-namespace Student
+namespace Solution
 {
+
     public class OOPPlayer : Character
     {
         public Inventory inventory;
-
-        private InputAction actionMove;
-
-        private void Awake()
-        {
-            actionMove = InputSystem.actions.FindAction("Move");
-        }
-
         public void Start()
         {
             PrintInfo();
             GetRemainEnergy();
+            inventory = GetComponent<Inventory>();
         }
 
         public void Update()
         {
-            if (actionMove.triggered)
+            if (Input.GetKeyDown(KeyCode.W))
             {
-                Vector2 moveDirection = actionMove.ReadValue<Vector2>();
-                Move(moveDirection);
+                Move(Vector2.up);
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                Move(Vector2.down);
+            }
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                Move(Vector2.left);
+            }
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                Move(Vector2.right);
             }
         }
 
@@ -34,7 +41,6 @@ namespace Student
             _enemy.energy -= AttackPoint;
             Debug.Log(_enemy.name + " is energy " + _enemy.energy);
         }
-
         protected override void CheckDead()
         {
             base.CheckDead();
@@ -43,5 +49,7 @@ namespace Student
                 Debug.Log("Player is Dead");
             }
         }
+
     }
+
 }

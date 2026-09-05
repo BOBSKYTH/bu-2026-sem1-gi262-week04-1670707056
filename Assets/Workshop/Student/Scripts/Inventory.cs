@@ -1,35 +1,53 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Student
-{
+namespace Solution {
     public class Inventory : MonoBehaviour
     {
-        // 1. ‡∏™‡∏£‡πâ‡∏≤‡∏á Dictionary ‡πÄ‡∏û‡∏∑‡πà‡∏≠‡πÄ‡∏Å‡πá‡∏ö‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•‡∏Ç‡∏≠‡∏á‡πÑ‡∏≠‡πÄ‡∏ó‡∏°‡πÉ‡∏ô‡∏Ñ‡∏•‡∏±‡∏á‡∏Ç‡∏≠‡∏á‡∏ú‡∏π‡πâ‡πÄ‡∏•‡πà‡∏ô
+        public Dictionary<string, int> inventory = new Dictionary<string, int>();
 
-        // 2. ‡∏ü‡∏±‡∏á‡∏Å‡πå‡∏ä‡∏±‡∏ô‡∏™‡∏≥‡∏´‡∏£‡∏±‡∏ö‡πÄ‡∏û‡∏¥‡πà‡∏°‡πÑ‡∏≠‡πÄ‡∏ó‡∏°
-        public void AddItem(string itemName)
+        // ‡æ‘Ë¡‰Õ‡∑Á¡
+        public void AddItem(string item, int amount)
         {
+            // 1. µ√«® Õ∫«Ë“¡’‰Õ‡∑Á¡π’È„π§≈—ß·≈È«À√◊Õ¬—ß
+           
 
+            Debug.Log("Added " + amount + " " + item + ". Total: " + inventory[item]);
         }
 
-        // 3. ‡∏ü‡∏±‡∏á‡∏Å‡πå‡∏ä‡∏±‡∏ô‡∏™‡∏≥‡∏´‡∏£‡∏±‡∏ö‡∏•‡∏ö‡πÑ‡∏≠‡πÄ‡∏ó‡∏°
-        public void UseItem(string itemName)
+        // ≈∫‰Õ‡∑Á¡
+        public void RemoveItem(string item, int amount)
         {
-
+            //4. µ√«® Õ∫«Ë“¡’‰Õ‡∑Á¡π’È„π§≈—ßÀ√◊Õ‰¡Ë
+            
         }
-
-        // 4. ‡∏ü‡∏±‡∏á‡∏Å‡πå‡∏ä‡∏±‡∏ô‡∏™‡∏≥‡∏´‡∏£‡∏±‡∏ö‡∏ï‡∏£‡∏ß‡∏à‡∏™‡∏≠‡∏ö‡∏à‡∏≥‡∏ô‡∏ß‡∏ô‡πÑ‡∏≠‡πÄ‡∏ó‡∏°‡πÉ‡∏ô‡∏Ñ‡∏•‡∏±‡∏á
-        public int numberOfItem(string itemName)
+        public bool HasItem(string item, int amount)
         {
+            //2. µ√«® Õ∫«Ë“¡’‰Õ‡∑Á¡π’È„π§≈—ßÀ√◊Õ‰¡Ë ·≈–¡’®”π«π‡æ’¬ßæÕÀ√◊Õ‰¡Ë
+            return false;
+        }
+        // µ√«® Õ∫®”π«π‰Õ‡∑Á¡
+        public int GetItemCount(string item)
+        {
+            //3. µ√«® Õ∫«Ë“¡’‰Õ‡∑Á¡π’È„π§≈—ßÀ√◊Õ‰¡Ë ∂È“¡’„ÀÈ§◊π§Ë“®”π«π‰Õ‡∑Á¡π—Èπ
             return 0;
         }
 
-        // 5. ‡∏ü‡∏±‡∏á‡∏Å‡πå‡∏ä‡∏±‡∏ô‡∏™‡∏≥‡∏´‡∏£‡∏±‡∏ö‡πÅ‡∏™‡∏î‡∏á‡∏à‡∏≥‡∏ô‡∏ß‡∏ô‡πÑ‡∏≠‡πÄ‡∏ó‡∏°‡πÉ‡∏ô‡∏Ñ‡∏•‡∏±‡∏á
-        public void ShowInventory()
+        // · ¥ß√“¬°“√∑—ÈßÀ¡¥„π§≈—ß
+        public void PrintInventory()
         {
+            Debug.Log("--- Inventory Content ---");
+            if (inventory.Count == 0)
+            {
+                Debug.Log("Inventory is empty.");
+                return;
+            }
 
+            foreach (var itemEntry in inventory)
+            {
+                Debug.Log(itemEntry.Key + ": " + itemEntry.Value);
+            }
         }
     }
 }
+

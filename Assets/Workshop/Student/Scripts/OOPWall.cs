@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Student
+namespace Solution
 {
 
     public class OOPWall : Identity
@@ -19,7 +19,7 @@ namespace Student
                 GetComponent<SpriteRenderer>().color = Color.blue;
             }
         }
-        public override void Hit()
+        public override bool Hit()
         {
             if (IsIceWall)
             {
@@ -29,8 +29,9 @@ namespace Student
             {
                 mapGenerator.player.TakeDamage(Damage);
             }
-            mapGenerator.mapdata[positionX, positionY] = 0;
+            mapGenerator.mapdata[positionX, positionY] = null;
             Destroy(gameObject);
+            return false;
         }
     }
 }

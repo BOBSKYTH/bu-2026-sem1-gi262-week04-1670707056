@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Student
+namespace Solution
 {
 
     public class Identity : MonoBehaviour
@@ -19,9 +19,9 @@ namespace Student
             Debug.Log("tell me your " + Name);
         }
 
-        public virtual void Hit()
+        public virtual bool Hit()
         {
-
+            return false;
         }
     }
 }

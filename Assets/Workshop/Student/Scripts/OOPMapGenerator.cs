@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 
-namespace Student
+namespace Solution
 {
 
     public class OOPMapGenerator : MonoBehaviour
@@ -18,42 +18,48 @@ namespace Student
 
         [Header("Set Exit")]
         public OOPExit Exit;
+        [Header("Set Exit")]
+        public Identity Wall;
 
         [Header("Set Prefab")]
         public GameObject[] floorsPrefab;
         public GameObject[] wallsPrefab;
         public GameObject[] demonWallsPrefab;
         public GameObject[] itemsPrefab;
-        public GameObject[] keysPrefab;
+        public GameObject[] collectItemsPrefab;
 
         [Header("Set Transform")]
         public Transform floorParent;
         public Transform wallParent;
-        public Transform itemPotionParent;
+        public Transform itemParent;
 
         [Header("Set object Count")]
         public int obsatcleCount;
         public int itemPotionCount;
-        public int itemKeyCount;
+        public int colloctItemCount;
 
-        public int[,] mapdata;
-
-        public OOPWall[,] walls;
-        public OOPItemPotion[,] potions;
-        public OOPItemKey[,] keys;
+        public Identity[,] mapdata;
 
         // block types ...
-        public int empty = 0;
-        public int demonWall = 1;
-        public int potion = 2;
-        public int bonuesPotion = 3;
-        public int exit = 4;
-        public int key = 5;
+        [HideInInspector]
+        public string empty = "";
+        [HideInInspector]
+        public string demonWall = "demonWall";
+        [HideInInspector]
+        public string potion = "potion";
+        [HideInInspector]
+        public string bonuesPotion = "bonuesPotion";
+        [HideInInspector]
+        public string exit = "exit";
+        [HideInInspector]
+        public string playerOnMap = "player";
+        [HideInInspector]
+        public string collectItem = "collectItem";
 
         // Start is called before the first frame update
         void Start()
         {
-            mapdata = new int[X, Y];
+            mapdata = new Identity[X, Y];
             for (int x = -1; x < X + 1; x++)
             {
                 for (int y = -1; y < Y + 1; y++)
@@ -71,6 +77,7 @@ namespace Student
                         GameObject obj = Instantiate(floorsPrefab[r], new Vector3(x, y, 1), Quaternion.identity);
                         obj.transform.parent = floorParent;
                         obj.name = "floor_" + x + ", " + y;
+                        mapdata[x, y] = null;
                     }
                 }
             }
@@ -79,94 +86,77 @@ namespace Student
             player.positionX = playerStartPos.x;
             player.positionY = playerStartPos.y;
             player.transform.position = new Vector3(playerStartPos.x, playerStartPos.y, -0.1f);
-            mapdata[playerStartPos.x, playerStartPos.y] = -1;
+            mapdata[playerStartPos.x, playerStartPos.y] = player;
 
-            walls = new OOPWall[X, Y];
             int count = 0;
+
+            int preventInfiniteLoop = 100;
             while (count < obsatcleCount)
             {
+                if (--preventInfiniteLoop < 0) break;
                 int x = Random.Range(0, X);
                 int y = Random.Range(0, Y);
-                if (mapdata[x, y] == 0)
+                if (mapdata[x, y] == null)
                 {
-                    PlaceDemonWall(x, y);
+                    PlaceItem(x, y,demonWallsPrefab,wallParent,demonWall);
                     count++;
                 }
             }
 
-            potions = new OOPItemPotion[X, Y];
             count = 0;
+            preventInfiniteLoop = 100;
             while (count < itemPotionCount)
             {
+                if (--preventInfiniteLoop < 0) break;
                 int x = Random.Range(0, X);
                 int y = Random.Range(0, Y);
-                if (mapdata[x, y] == empty)
+                if (mapdata[x, y] == null)
                 {
-                    PlaceItem(x, y);
+                    PlaceItem(x, y,itemsPrefab, itemParent, potion);
                     count++;
                 }
             }
-
-            keys = new OOPItemKey[X, Y];
             count = 0;
-            while (count < itemKeyCount)
+            preventInfiniteLoop = 100;
+            while (count < colloctItemCount)
             {
+                if (--preventInfiniteLoop < 0) break;
                 int x = Random.Range(0, X);
                 int y = Random.Range(0, Y);
-                if (mapdata[x, y] == empty)
+                if (mapdata[x, y] == null)
                 {
-                    PlaceKey(x, y);
+                    PlaceItem(x, y,collectItemsPrefab, itemParent,collectItem);
                     count++;
                 }
             }
-
-            mapdata[X - 1, Y - 1] = exit;
+            mapdata[X - 1, Y - 1] = Exit;
             Exit.transform.position = new Vector3(X - 1, Y - 1, 0);
         }
 
-        public int GetMapData(float x, float y)
+        public Identity GetMapData(float x, float y)
         {
-            if (x >= X || x < 0 || y >= Y || y < 0) return -1;
+            if (x >= X || x < 0 || y >= Y || y < 0) {
+                return Wall;
+            }
+
             return mapdata[(int)x, (int)y];
         }
 
-        public void PlaceItem(int x, int y)
+        public void PlaceItem(int x, int y,GameObject[] _itemsPrefab,Transform parrent,string _name)
         {
-            int r = Random.Range(0, itemsPrefab.Length);
-            GameObject obj = Instantiate(itemsPrefab[r], new Vector3(x, y, 0), Quaternion.identity);
-            obj.transform.parent = itemPotionParent;
-            mapdata[x, y] = potion;
-            potions[x, y] = obj.GetComponent<OOPItemPotion>();
-            potions[x, y].positionX = x;
-            potions[x, y].positionY = y;
-            potions[x, y].mapGenerator = this;
-            obj.name = $"Item_{potions[x, y].Name} {x}, {y}";
+            int r = Random.Range(0, _itemsPrefab.Length);
+            GameObject obj = Instantiate(_itemsPrefab[r], new Vector3(x, y, 0), Quaternion.identity);
+            obj.transform.parent = parrent;
+            mapdata[x, y] = obj.GetComponent<Identity>();
+            mapdata[x, y].positionX = x;
+            mapdata[x, y].positionY = y;
+            mapdata[x, y].mapGenerator = this;
+            if (_name != collectItem) {
+                mapdata[x, y].Name = _name;
+            }
+            obj.name = $"Item_{mapdata[x, y].Name} {x}, {y}";
         }
 
-        public void PlaceKey(int x, int y)
-        {
-            int r = Random.Range(0, keysPrefab.Length);
-            GameObject obj = Instantiate(keysPrefab[r], new Vector3(x, y, 0), Quaternion.identity);
-            obj.transform.parent = itemPotionParent;
-            mapdata[x, y] = key;
-            keys[x, y] = obj.GetComponent<OOPItemKey>();
-            keys[x, y].positionX = x;
-            keys[x, y].positionY = y;
-            keys[x, y].mapGenerator = this;
-            obj.name = $"Item_{keys[x, y].Name} {x}, {y}";
-        }
-
-        public void PlaceDemonWall(int x, int y)
-        {
-            int r = Random.Range(0, demonWallsPrefab.Length);
-            GameObject obj = Instantiate(demonWallsPrefab[r], new Vector3(x, y, 0), Quaternion.identity);
-            obj.transform.parent = wallParent;
-            mapdata[x, y] = demonWall;
-            walls[x, y] = obj.GetComponent<OOPWall>();
-            walls[x, y].positionX = x;
-            walls[x, y].positionY = y;
-            walls[x, y].mapGenerator = this;
-            obj.name = $"DemonWall_{walls[x, y].Name} {x}, {y}";
-        }
+       
     }
 }
