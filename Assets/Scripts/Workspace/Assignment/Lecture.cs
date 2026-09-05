@@ -7,24 +7,30 @@ namespace Assignment
     {
         public void Start()
         {
-            // LCT01_SyntaxLinkedList();
-            // LCT02_SyntaxHashTable();
-            // LCT03_SyntaxDictionary();
+            // LCT01_SyntaxList();
+            // LCT02_SyntaxLinkedList();
+            // LCT03_SyntaxHashTable();
+            // LCT04_SyntaxDictionary();
         }
 
         #region Lecture
 
-        public void LCT01_SyntaxLinkedList()
+        public void LCT01_SyntaxList()
         {
             throw new System.NotImplementedException();
         }
 
-        public void LCT02_SyntaxHashTable()
+        public void LCT02_SyntaxLinkedList()
         {
             throw new System.NotImplementedException();
         }
 
-        public void LCT03_SyntaxDictionary()
+        public void LCT03_SyntaxHashTable()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void LCT04_SyntaxDictionary()
         {
             throw new System.NotImplementedException();
         }
