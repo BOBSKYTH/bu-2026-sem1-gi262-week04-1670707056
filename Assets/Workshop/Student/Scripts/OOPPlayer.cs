@@ -1,13 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.InputSystem;
 
 namespace Student
 {
     public class OOPPlayer : Character
     {
         public Inventory inventory;
+
+        private InputAction actionMove;
+
+        private void Awake()
+        {
+            actionMove = InputSystem.actions.FindAction("Move");
+        }
 
         public void Start()
         {
@@ -17,21 +22,10 @@ namespace Student
 
         public void Update()
         {
-            if (Input.GetKeyDown(KeyCode.W))
+            if (actionMove.triggered)
             {
-                Move(Vector2.up);
-            }
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                Move(Vector2.down);
-            }
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                Move(Vector2.left);
-            }
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                Move(Vector2.right);
+                Vector2 moveDirection = actionMove.ReadValue<Vector2>();
+                Move(moveDirection);
             }
         }
 
@@ -49,7 +43,5 @@ namespace Student
                 Debug.Log("Player is Dead");
             }
         }
-
     }
-
 }

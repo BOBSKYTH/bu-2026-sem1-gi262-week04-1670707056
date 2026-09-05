@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Student
 {
@@ -11,6 +12,14 @@ namespace Student
         private LinkedList<GameObject> snakeBody = new LinkedList<GameObject>();
         private Vector3 direction = Vector3.right;
         public float moveSpeed = 0.5f;
+        private InputAction moveAction;
+        private InputAction growAction;
+
+        void Awake()
+        {
+            moveAction = InputSystem.actions.FindAction("Move");
+            growAction = InputSystem.actions.FindAction("Grow");
+        }
 
         void Start()
         {
@@ -23,16 +32,17 @@ namespace Student
         void Update()
         {
             // Update direction based on input
-            if (Input.GetKeyDown(KeyCode.W))
-                direction = Vector3.up;
-            else if (Input.GetKeyDown(KeyCode.S))
-                direction = Vector3.down;
-            else if (Input.GetKeyDown(KeyCode.A))
-                direction = Vector3.left;
-            else if (Input.GetKeyDown(KeyCode.D))
-                direction = Vector3.right;
-            else if (Input.GetKeyDown(KeyCode.Space))
+            var changedDirection = moveAction.ReadValue<Vector2>();
+            changedDirection.Normalize();
+            if (changedDirection != Vector2.zero)
+            {
+                direction = changedDirection;
+            }
+            
+            if (growAction.triggered)
+            {
                 GrowSnake();
+            }
         }
 
         IEnumerator MoveSnake()
